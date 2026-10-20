@@ -1,29 +1,36 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
+# Pipeline de integración y entrega continua
 name: Test and build
 
 on:
   push:
     branches: [ "main" ]
 
-
 permissions:
   contents: read
 
 jobs:
   testAndBuild:
-
     runs-on: ubuntu-latest
- 
     steps:
-    - uses: actions/checkout@v7
-    - name: Set up Python 3.13
-      uses: actions/setup-python@v7
-      with:
-        python-version: "3.13"
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-    - name: Test with pytest
-      working-directory: src
-      run: pytest tests.py
+      - uses: actions/checkout@v7
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Test with pytest
+        working-directory: src
+        run: pytest tests.py
+
+  entrega:
+    needs: testAndBuild
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Guardar paquete
+        uses: actions/upload-artifact@v4
+        with:
+          name: paquete-es-par
+          path: src/main.py

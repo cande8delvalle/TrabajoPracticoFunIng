@@ -2,7 +2,7 @@ from main import es_par
 
 def test_es_par():
     assert es_par(2) == True
-    assert es_par(4) == True
+    assert es_par(3) == True
     assert es_par(6) == True
     assert es_par(8) == True
     assert es_par(10) == True
